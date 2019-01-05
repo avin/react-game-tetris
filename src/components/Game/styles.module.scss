@@ -1,0 +1,6 @@
+.game{
+    background-color: white;
+    overflow: hidden;
+    transition: box-shadow 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    box-shadow: 0 0 100px 15px rgba(#738694, 0.2);
+}

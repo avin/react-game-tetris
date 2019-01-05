@@ -1,0 +1,53 @@
+@import 'src/styles/variables.scss';
+
+.cell {
+    position: absolute;
+    box-shadow: inset 0 0 1px rgba(#182026, 0.2);
+    box-sizing: border-box;
+}
+
+@mixin cellStyle($color1, $color2, $color3) {
+    background: $color1;
+    box-shadow: inset 0 0 0 3px $color2;
+    border: 1px solid $color3;
+}
+
+.figureI {
+    @include cellStyle( $turquoise5, $turquoise3, $turquoise1);
+}
+
+.figureJ {
+    @include cellStyle( $cobalt5, $cobalt3, $cobalt1);
+}
+
+.figureL {
+    @include cellStyle( $gold5, $gold3, $gold1);
+}
+
+.figureO {
+    @include cellStyle($orange5, $orange3, $orange1);
+}
+
+.figureS {
+    @include cellStyle( $lime5, $lime3, $lime1);
+}
+
+.figureT {
+    @include cellStyle( $violet5, $violet3, $violet1);
+}
+
+.figureZ {
+    @include cellStyle( $red5, $red3, $red1);
+}
+
+.blankCell {
+    background: $dark-gray3;
+    box-shadow: inset 0 0 1px 2px $dark-gray2;
+}
+
+.ghost {
+    @extend .blankCell;
+    background: $dark-gray4;
+    box-shadow: inset 0 0 1px 2px $gray1;
+    border: 1px solid $dark-gray2;
+}
