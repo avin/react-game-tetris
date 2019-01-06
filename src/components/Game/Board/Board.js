@@ -8,10 +8,12 @@ import {
     FIELD_WIDTH,
     KEY_DOWN_REPEAT_TIME,
     KEY_REPEAT_TIME,
+    TICK_TIME,
 } from '../../../constants/game';
 import Field from './Field/Field';
 import LabelScreen from './LabelScreen/LabelScreen';
 import { gameTick, moveCurrent, pauseGame, restartGame } from '../../../redux/modules/game/actions';
+import CellsBackYard from './CellsBackYard/CellsBackYard';
 
 export class Board extends React.Component {
     doGameTick = ({ skip = false, doNotRepeat = false } = {}) => {
@@ -24,7 +26,7 @@ export class Board extends React.Component {
             return;
         }
 
-        this.gameTickTimeoutId = setTimeout(() => this.doGameTick(), 500);
+        this.gameTickTimeoutId = setTimeout(() => this.doGameTick(), TICK_TIME);
     };
 
     clearGameTickTimeout() {
@@ -177,6 +179,7 @@ export class Board extends React.Component {
                     height: boardHeight,
                 }}
             >
+                <CellsBackYard />
                 {!showIntro && <Field />}
                 <LabelScreen
                     active={showIntro}

@@ -1,26 +1,33 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'clsx';
 import styles from './styles.module.scss';
-import { CELL_SIZE_PX, FIGURES } from '../../../../../constants/game';
+import { CELL_SIZE_PX, FIGURES } from '../../../../constants/game';
 
-export class Cell extends React.Component {
+export default class Cell extends React.Component {
     static propTypes = {
-        cell: PropTypes.object.isRequired,
+        figure: PropTypes.object,
+        current: PropTypes.bool,
+        baked: PropTypes.bool,
+        ghost: PropTypes.bool,
+        odd: PropTypes.bool,
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,
     };
 
+    static defaultProps = {
+        figure: null,
+    };
+
     render() {
-        const { x, y, cell } = this.props;
+        const { x, y, figure, ghost, current, baked, odd } = this.props;
 
         let cellClassName;
 
-        if (cell.get('isGhost')) {
+        if (ghost) {
             cellClassName = styles.ghost;
         } else {
-            switch (cell.get('figure')) {
+            switch (figure) {
                 case FIGURES.get('I'): {
                     cellClassName = styles.figureI;
                     break;
@@ -56,7 +63,16 @@ export class Cell extends React.Component {
 
         return (
             <div
-                className={cn(styles.cell, cellClassName)}
+                className={cn(
+                    styles.cell,
+                    cellClassName,
+                    {
+                        [styles.ghost]: ghost,
+                        [styles.current]: current,
+                        [styles.bakedCell]: baked,
+                    },
+                    { [styles.odd]: odd },
+                )}
                 style={{
                     left: x * CELL_SIZE_PX,
                     top: y * CELL_SIZE_PX,
@@ -67,16 +83,3 @@ export class Cell extends React.Component {
         );
     }
 }
-
-function mapStateToProps(state, ownProps) {
-    const { y, x } = ownProps;
-
-    return {
-        cell: state.game.getIn(['cells', y, x]),
-    };
-}
-
-export default connect(
-    mapStateToProps,
-    {},
-)(Cell);

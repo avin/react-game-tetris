@@ -1,4 +1,5 @@
 import * as Immutable from 'immutable';
+import shortId from 'shortid';
 import { SET_GAME_STATE } from './actionTypes';
 import { DIRECTION, FIELD_HEIGHT, FIELD_WIDTH, FIGURES, NEXT_COUNT } from '../../../constants/game';
 import { randomArrayElement } from '../../../utils/helpers';
@@ -46,19 +47,17 @@ function cleanCells(cells, isDirtyCompare) {
  * @param modificators
  * @returns {*}
  */
-function addCurrentToCells(cells, current, modificators = {}) {
-    if (modificators.isCurrent) {
-        cells = addGhostToCells(cells, current);
-    }
-
+function addCurrentToCells(cells, current) {
     current.get('matrix').forEach((row, y) => {
         row.forEach((matrixValue, x) => {
             if (matrixValue) {
+                const id = shortId.generate();
+
                 cells = cells.setIn(
                     [y + current.getIn(['offset', 'y']), x + current.getIn(['offset', 'x'])],
                     new Immutable.Map({
-                        ...modificators,
                         figure: current.get('figure'),
+                        id,
                     }),
                 );
             }
@@ -83,6 +82,8 @@ function getNewCurrent(nextList) {
         nextList = nextList.push(randomArrayElement(FIGURES.keySeq().toArray()));
     }
 
+    // nextList = new Immutable.List(['O','O','O'])
+
     const nextListItem = nextList.get(0);
     nextList = nextList.slice(1);
 
@@ -94,6 +95,7 @@ function getNewCurrent(nextList) {
             x: FIELD_WIDTH / 2 + figure.getIn(['centerOffset', 1]),
         }),
         matrix: figure.get('matrix'),
+        id: shortId.generate(),
     });
 
     return [current, nextList];
@@ -148,17 +150,6 @@ function getGhost(cells, current) {
 }
 
 /**
- * Добавить current призрак к клеткам
- * @param cells
- * @param current
- */
-function addGhostToCells(cells, current) {
-    const ghostCurrent = getGhost(cells, current);
-
-    return addCurrentToCells(cells, ghostCurrent, { isGhost: true });
-}
-
-/**
  * Проверить не пора ли фигуре прилипнуть к основанию
  */
 function testCurrentToCrash(cells, current) {
@@ -204,8 +195,7 @@ function testCurrentToCrash(cells, current) {
 export function restartGame() {
     const [current, nextList] = getNewCurrent();
 
-    let cells = generateBlankField();
-    cells = addCurrentToCells(cells, current, { isCurrent: true });
+    const cells = generateBlankField();
 
     const state = new Immutable.Map()
         .set('totalAdded', 0)
@@ -216,6 +206,7 @@ export function restartGame() {
         .set('nextList', nextList)
         .set('current', current)
         .set('cells', cells)
+        .set('ghost', getGhost(cells, current))
         .set('gameOver', false);
 
     return {
@@ -290,17 +281,15 @@ export function gameTick({ forceDrop = false } = {}) {
             // Если новая фигура сразу врезается - то гамовер
             if (testCurrentToCrash(cells, current)) {
                 game = game.set('gameOver', true).set('inGame', false);
-            } else {
-                cells = addCurrentToCells(cells, current, { isCurrent: true });
             }
         } else {
             // Опускаем вниз
             current = current.setIn(['offset', 'y'], current.getIn(['offset', 'y']) + 1);
-            cells = addCurrentToCells(cells, current, { isCurrent: true });
         }
 
         game = game
             .set('current', current)
+            .set('ghost', getGhost(cells, current))
             .set('cells', cells)
             .set('score', score)
             .set('nextList', nextList);
@@ -327,7 +316,7 @@ export function moveCurrent(direction) {
 
         switch (direction) {
             case DIRECTION.UP: {
-                current = current.set('matrix', turnOverMatrix(current.get('matrix')));
+                current = current.set('matrix', turnOverMatrix(current.get('matrix'))).set('id', shortId.generate());
                 break;
             }
             case DIRECTION.RIGHT: {
@@ -349,9 +338,10 @@ export function moveCurrent(direction) {
             return;
         }
 
-        cells = addCurrentToCells(cells, current, { isCurrent: true });
-
-        game = game.set('current', current).set('cells', cells);
+        game = game
+            .set('current', current)
+            .set('cells', cells)
+            .set('ghost', getGhost(cells, current));
 
         dispatch({
             type: SET_GAME_STATE,

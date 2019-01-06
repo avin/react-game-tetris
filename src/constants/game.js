@@ -1,6 +1,7 @@
 import * as Immutable from 'immutable';
 
 export const GAME_TIME = 60 * 2 * 1000; // 2 минуты
+export const TICK_TIME = 500;
 
 export const CELL_SIZE_PX = 20;
 export const CELL_MARGIN_PX = 1;

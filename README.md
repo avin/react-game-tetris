@@ -1,4 +1,4 @@
-# React-tetris [![Build Status](https://travis-ci.org/avin/react-tetris.svg?branch=master)](https://travis-ci.org/avin/react-tetris)
+# React-game-tetris [![Build Status](https://travis-ci.org/avin/react-game-tetris.svg?branch=master)](https://travis-ci.org/avin/react-game-tetris)
 
 > The interpretation of the classic game "_Tetris_" in React+Redux
 
