@@ -44,7 +44,6 @@ function cleanCells(cells, isDirtyCompare) {
  * Перенести current на клетки
  * @param cells
  * @param current
- * @param modificators
  * @returns {*}
  */
 function addCurrentToCells(cells, current) {
@@ -75,14 +74,15 @@ function addCurrentToCells(cells, current) {
 function getNewCurrent(nextList) {
     if (!nextList) {
         nextList = new Immutable.List();
-        for (let i = 0; i < NEXT_COUNT; i += 1) {
+        for (let i = 0; i <= NEXT_COUNT; i += 1) {
             nextList = nextList.push(randomArrayElement(FIGURES.keySeq().toArray()));
         }
     } else {
         nextList = nextList.push(randomArrayElement(FIGURES.keySeq().toArray()));
     }
 
-    // nextList = new Immutable.List(['O','O','O'])
+    // Для дебага выставить фигуры какие нужно в очереди
+    // nextList = new Immutable.List(['I','I','I'])
 
     const nextListItem = nextList.get(0);
     nextList = nextList.slice(1);
@@ -276,7 +276,7 @@ export function gameTick({ forceDrop = false } = {}) {
             }
 
             // Генерим новый current
-            [current, nextList] = getNewCurrent();
+            [current, nextList] = getNewCurrent(nextList);
 
             // Если новая фигура сразу врезается - то гамовер
             if (testCurrentToCrash(cells, current)) {

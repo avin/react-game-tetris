@@ -1,0 +1,11 @@
+@import 'src/styles/variables.scss';
+
+.container {
+    width: 80px;
+    height: 80px;
+}
+
+.inner {
+    position: relative;
+    transform: scale(0.8);
+}

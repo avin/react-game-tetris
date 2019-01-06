@@ -2,12 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.scss';
 import Board from './Board/Board';
+import NextBar from './NextBar/NextBar';
+import ScoreBar from './ScoreBar/ScoreBar';
 
 export class Game extends React.Component {
     render() {
         return (
             <div className={styles.game}>
                 <Board />
+                <NextBar />
+                <ScoreBar />
             </div>
         );
     }

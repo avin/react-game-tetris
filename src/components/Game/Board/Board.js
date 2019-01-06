@@ -13,7 +13,7 @@ import {
 import Field from './Field/Field';
 import LabelScreen from './LabelScreen/LabelScreen';
 import { gameTick, moveCurrent, pauseGame, restartGame } from '../../../redux/modules/game/actions';
-import CellsBackYard from './CellsBackYard/CellsBackYard';
+import CellsBackYard from '../CellsBackYard/CellsBackYard';
 
 export class Board extends React.Component {
     doGameTick = ({ skip = false, doNotRepeat = false } = {}) => {

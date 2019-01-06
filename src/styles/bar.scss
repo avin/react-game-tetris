@@ -1,0 +1,24 @@
+$width: 80px;
+$borderWidth: 4px;
+
+$transitionCurve: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+.bar {
+    position: absolute;
+
+
+    width: $width;
+    //height: 115px;
+    background-color: $dark-gray4;
+    border: 4px solid $dark-gray3;
+    z-index: 1;
+    border-radius: 0 5px 5px 0;
+}
+
+.title {
+    margin-top:5px;
+    font-size: 25px;
+    text-align: center;
+    color: $white;
+    text-shadow: 1px 1px 0 $gray3;
+}

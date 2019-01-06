@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'clsx';
 import styles from './styles.module.scss';
-import { CELL_SIZE_PX, FIGURES } from '../../../../constants/game';
+import { CELL_SIZE_PX, FIGURES } from '../../../constants/game';
 
 export default class Cell extends React.Component {
     static propTypes = {

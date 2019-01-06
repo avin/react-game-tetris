@@ -3,4 +3,7 @@
 .board{
     background-color: $dark-gray3;
     position: relative;
+    border-radius: 5px;
+    border: 4px solid $dark-gray3;
+    z-index: 5;
 }

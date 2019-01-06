@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Cell from '../Cell/Cell';
+import Cell from '../../Cell/Cell';
 import styles from './styles.module.scss';
 import { FIELD_HEIGHT, FIELD_WIDTH } from '../../../../constants/game';
 

@@ -1,0 +1,24 @@
+@import 'src/styles/variables.scss';
+@import 'src/styles/bar.scss';
+
+.bar {
+    @extend .bar;
+
+    top: 40px;
+    right: 0;
+    transition: right 300ms $transitionCurve;
+}
+
+.visible {
+    right: ($width + $borderWidth) * -1;
+}
+
+.title {
+    @extend .title;
+}
+
+.figures {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

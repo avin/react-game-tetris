@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@avinlab/react-flash-change": "^1.2.0",
         "clsx": "^1.0.0",
         "immutable": "^4.0.0-rc.12",
         "node-sass": "^4.11.0",
