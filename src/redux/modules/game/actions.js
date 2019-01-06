@@ -22,9 +22,15 @@ function generateBlankField() {
     return cells;
 }
 
+/**
+ * Убрать с поля клетки по результату ф-ии isDirtyCompare
+ * @param cells
+ * @param isDirtyCompare
+ * @returns {*}
+ */
 function cleanCells(cells, isDirtyCompare) {
-    return cells.map((row, y) =>
-        row.map((cell, x) => {
+    return cells.map(row =>
+        row.map(cell => {
             if (isDirtyCompare(cell)) {
                 return blankCell;
             }
@@ -33,6 +39,13 @@ function cleanCells(cells, isDirtyCompare) {
     );
 }
 
+/**
+ * Перенести current на клетки
+ * @param cells
+ * @param current
+ * @param modificators
+ * @returns {*}
+ */
 function addCurrentToCells(cells, current, modificators = {}) {
     if (modificators.isCurrent) {
         cells = addGhostToCells(cells, current);
@@ -55,6 +68,11 @@ function addCurrentToCells(cells, current, modificators = {}) {
     return cells;
 }
 
+/**
+ * Сгенерировать новый current
+ * @param nextList
+ * @returns {*[]}
+ */
 function getNewCurrent(nextList) {
     if (!nextList) {
         nextList = new Immutable.List();
@@ -81,6 +99,11 @@ function getNewCurrent(nextList) {
     return [current, nextList];
 }
 
+/**
+ * Обработать завершенные строки в клетках
+ * @param cells
+ * @returns {*[]}
+ */
 function processCompletedRows(cells) {
     let completedRowsCount = 0;
 
@@ -102,7 +125,13 @@ function processCompletedRows(cells) {
     return [result, completedRowsCount];
 }
 
-function addGhostToCells(cells, current) {
+/**
+ * Получить current призрак у основания падения
+ * @param cells
+ * @param current
+ * @returns {*|this|this|string[]|Cursor|this|this|this|this}
+ */
+function getGhost(cells, current) {
     let ghostCurrent = current;
     let isOk;
     let attemptGhostCurrent;
@@ -114,6 +143,17 @@ function addGhostToCells(cells, current) {
             ghostCurrent = attemptGhostCurrent;
         }
     } while (isOk);
+
+    return ghostCurrent;
+}
+
+/**
+ * Добавить current призрак к клеткам
+ * @param cells
+ * @param current
+ */
+function addGhostToCells(cells, current) {
+    const ghostCurrent = getGhost(cells, current);
 
     return addCurrentToCells(cells, ghostCurrent, { isGhost: true });
 }
@@ -209,7 +249,7 @@ export function pauseGame(value) {
 /**
  * Совершить одну итерацию в игре
  */
-export function gameTick() {
+export function gameTick({ forceDrop = false } = {}) {
     return (dispatch, getState) => {
         let { game } = getState();
 
@@ -225,8 +265,12 @@ export function gameTick() {
         cells = cleanCells(cells, cell => cell.get('isCurrent') || cell.get('isGhost'));
 
         const newCurrent = current.setIn(['offset', 'y'], current.getIn(['offset', 'y']) + 1);
+        if (forceDrop) {
+            current = getGhost(cells, current);
+        }
+
         // Проверяем на готовность прилипнуть
-        if (testCurrentToCrash(cells, newCurrent)) {
+        if (testCurrentToCrash(cells, newCurrent) || forceDrop) {
             // Запекаем текущий current
             cells = addCurrentToCells(cells, current);
             game = game.set('totalAdded', game.get('totalAdded') + 1);
@@ -254,6 +298,7 @@ export function gameTick() {
             current = current.setIn(['offset', 'y'], current.getIn(['offset', 'y']) + 1);
             cells = addCurrentToCells(cells, current, { isCurrent: true });
         }
+
         game = game
             .set('current', current)
             .set('cells', cells)

@@ -34,14 +34,24 @@ export class Board extends React.Component {
     }
 
     handlePressSpace = e => {
-        const { restartGame, pauseGame, pause, showIntro, gameOver } = this.props;
+        const { restartGame, pauseGame, pause, showIntro, gameOver, gameTick } = this.props;
         if (showIntro || gameOver) {
             return restartGame();
         }
         if (pause) {
+            return pauseGame(false);
+        }
+
+        gameTick({ forceDrop: true });
+    };
+
+    handlePressEsc = e => {
+        const { pauseGame, pause } = this.props;
+
+        if (pause) {
             pauseGame(false);
         } else {
-            pauseGame(true);
+            return pauseGame(true);
         }
     };
 
@@ -74,6 +84,12 @@ export class Board extends React.Component {
                 keys: 'space',
                 is_exclusive: true,
                 on_keydown: this.handlePressSpace,
+                prevent_repeat: true,
+            },
+            {
+                keys: 'esc',
+                is_exclusive: true,
+                on_keydown: this.handlePressEsc,
                 prevent_repeat: true,
             },
             {
