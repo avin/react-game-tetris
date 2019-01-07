@@ -1,9 +1,46 @@
 @import 'src/styles/variables.scss';
 
-.board{
+.board {
     background-color: $dark-gray3;
     position: relative;
     border-radius: 5px;
-    border: 4px solid $dark-gray3;
     z-index: 5;
+}
+
+.cool {
+    animation: logoAnimation 2000ms infinite;
+}
+
+.spaceButton {
+    animation: spaceButtonAnimation 500ms infinite;
+}
+
+@keyframes logoAnimation {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    33% {
+        transform: scale(1.025) rotate(5deg);
+    }
+    66% {
+        transform: scale(1.05) rotate(-5deg);
+    }
+}
+
+@keyframes spaceButtonAnimation {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.newRecord{
+    color: $rose4;
+    text-shadow: 1px 1px 0px white;
 }

@@ -10,6 +10,10 @@
     transition: left 300ms $transitionCurve;
 }
 
+.visible {
+    left: ($width + $borderWidth * 2) * -1;
+}
+
 .score {
     $shadowColor: $white;
 
@@ -58,10 +62,6 @@
     100% {
         transform: scale(1) rotate(0deg);
     }
-}
-
-.visible {
-    left: ($width + $borderWidth) * -1;
 }
 
 .title {

@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 import Board from './Board/Board';
 import NextBar from './NextBar/NextBar';
 import ScoreBar from './ScoreBar/ScoreBar';
+import GameTimer from './GameTimer/GameTimer';
 
 export class Game extends React.Component {
     render() {
@@ -12,6 +13,7 @@ export class Game extends React.Component {
                 <Board />
                 <NextBar />
                 <ScoreBar />
+                <GameTimer />
             </div>
         );
     }

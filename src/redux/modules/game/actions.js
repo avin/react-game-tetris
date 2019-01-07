@@ -1,8 +1,8 @@
 import * as Immutable from 'immutable';
 import shortId from 'shortid';
+import shuffle from 'lodash/shuffle';
 import { SET_GAME_STATE } from './actionTypes';
-import { DIRECTION, FIELD_HEIGHT, FIELD_WIDTH, FIGURES, NEXT_COUNT } from '../../../constants/game';
-import { randomArrayElement } from '../../../utils/helpers';
+import { DIRECTION, FIELD_HEIGHT, FIELD_WIDTH, FIGURES, SHUFFLE_SETS_COUNT } from '../../../constants/game';
 import { turnOverMatrix } from '../../../utils/matrix';
 
 const blankCell = new Immutable.Map({
@@ -66,6 +66,18 @@ function addCurrentToCells(cells, current) {
     return cells;
 }
 
+function fillNextList(nextList) {
+    let figuresSet = [];
+    for (let i = 0; i < SHUFFLE_SETS_COUNT; i += 1) {
+        figuresSet = [...figuresSet, ...FIGURES.keySeq().toArray()];
+    }
+    figuresSet = shuffle(figuresSet);
+    figuresSet.forEach(figureKey => {
+        nextList = nextList.push(figureKey);
+    });
+    return nextList;
+}
+
 /**
  * Сгенерировать новый current
  * @param nextList
@@ -74,11 +86,9 @@ function addCurrentToCells(cells, current) {
 function getNewCurrent(nextList) {
     if (!nextList) {
         nextList = new Immutable.List();
-        for (let i = 0; i <= NEXT_COUNT; i += 1) {
-            nextList = nextList.push(randomArrayElement(FIGURES.keySeq().toArray()));
-        }
-    } else {
-        nextList = nextList.push(randomArrayElement(FIGURES.keySeq().toArray()));
+        nextList = fillNextList(nextList);
+    } else if (nextList.size < FIGURES.size * SHUFFLE_SETS_COUNT - 1) {
+        nextList = fillNextList(nextList);
     }
 
     // Для дебага выставить фигуры какие нужно в очереди
@@ -190,6 +200,23 @@ function testCurrentToCrash(cells, current) {
 }
 
 /**
+ * Проверка на побитие нового рекорда
+ * @param game
+ * @returns {*}
+ */
+function checkRecord(game) {
+    const personalRecord = game.get('personalRecord');
+    const score = game.get('score');
+
+    if (score > personalRecord) {
+        localStorage.setItem('tetris:record', score);
+        game = game.set('personalRecord', score).set('newRecord', true);
+    }
+
+    return game;
+}
+
+/**
  * Рестартануть игру
  */
 export function restartGame() {
@@ -207,7 +234,9 @@ export function restartGame() {
         .set('current', current)
         .set('cells', cells)
         .set('ghost', getGhost(cells, current))
-        .set('gameOver', false);
+        .set('gameOver', false)
+        .set('newRecord', false)
+        .set('personalRecord', localStorage.getItem('tetris:record') || 0);
 
     return {
         type: SET_GAME_STATE,
@@ -280,6 +309,8 @@ export function gameTick({ forceDrop = false } = {}) {
 
             // Если новая фигура сразу врезается - то гамовер
             if (testCurrentToCrash(cells, current)) {
+                game = checkRecord(game);
+
                 game = game.set('gameOver', true).set('inGame', false);
             }
         } else {
@@ -342,6 +373,24 @@ export function moveCurrent(direction) {
             .set('current', current)
             .set('cells', cells)
             .set('ghost', getGhost(cells, current));
+
+        dispatch({
+            type: SET_GAME_STATE,
+            state: game,
+        });
+    };
+}
+
+export function setTimeOver() {
+    return (dispatch, getState) => {
+        let { game } = getState();
+
+        game = checkRecord(game);
+
+        game = game
+            .set('gameOver', true)
+            .set('timeOver', true)
+            .set('inGame', false);
 
         dispatch({
             type: SET_GAME_STATE,

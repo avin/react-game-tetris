@@ -8,6 +8,7 @@ const initialState = new Immutable.Map({
     gameOver: false,
     score: null,
     cells: null,
+    newRecord: false,
 });
 
 export default function reducer(state = initialState, action = {}) {

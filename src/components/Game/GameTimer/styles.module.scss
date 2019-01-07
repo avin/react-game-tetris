@@ -1,0 +1,45 @@
+@import 'src/styles/variables.scss';
+@import 'src/styles/bar.scss';
+
+.timerBar {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    box-sizing: border-box;
+    transition: bottom 300ms $transitionCurve;
+    overflow: hidden;
+    background-color: $dark-gray5;
+
+    border: 4px solid $dark-gray3;
+}
+
+.visible {
+    bottom: -35px;
+}
+
+@mixin fillTracker ($color) {
+    background-color: $color;
+    box-shadow: 0 0 5px 5px $color;
+}
+
+.tracker {
+    height: 10px;
+    transition: all 500ms linear;
+}
+
+.okTracker {
+    @include fillTracker($green4);
+}
+
+.warningTracker {
+    @include fillTracker($orange4);
+}
+
+.dangerTracker {
+    @include fillTracker($red4);
+}
+
+.noTracker {
+    background-color: $dark-gray3;
+    box-shadow: 0 0 0 0 $dark-gray3;
+}

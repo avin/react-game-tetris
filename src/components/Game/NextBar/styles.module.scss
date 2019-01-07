@@ -10,7 +10,7 @@
 }
 
 .visible {
-    right: ($width + $borderWidth) * -1;
+    right: ($width + $borderWidth*2) * -1;
 }
 
 .title {

@@ -4,8 +4,10 @@
     "private": true,
     "dependencies": {
         "@avinlab/react-flash-change": "^1.2.0",
+        "@avinlab/repeat": "^1.0.0",
         "clsx": "^1.0.0",
         "immutable": "^4.0.0-rc.12",
+        "lodash": "^4.17.11",
         "node-sass": "^4.11.0",
         "normalize.css": "^8.0.1",
         "prop-types": "^15.6.2",

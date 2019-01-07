@@ -5,8 +5,6 @@ $transitionCurve: cubic-bezier(0.645, 0.045, 0.355, 1);
 
 .bar {
     position: absolute;
-
-
     width: $width;
     //height: 115px;
     background-color: $dark-gray4;
@@ -16,7 +14,7 @@ $transitionCurve: cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .title {
-    margin-top:5px;
+    margin-top: 5px;
     font-size: 25px;
     text-align: center;
     color: $white;
