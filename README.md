@@ -11,8 +11,9 @@
 ## Another games
 
 Also check my another React+Redux games:
-* [Snake](https://github.com/avin/react-game-snake/)
-* [15 puzzle](https://avin.github.io/react-game15/)
+* [The Game of Life](https://github.com/avin/react-game-life)
+* [Snake](https://github.com/avin/react-game-snake)
+* [15 puzzle](https://github.com/avin/react-game15)
 
 ## License
 
